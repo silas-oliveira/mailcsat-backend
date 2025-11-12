@@ -9,12 +9,6 @@ export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!email.endsWith('@linx.com.br')) {
-      logger.warn(`⚠️ [REGISTER CONTROLLER] E-mail inválido para registro: ${email}`);
-      return res.status(400).json({ message: 'Cadastro permitido apenas com e-mails @linx.com.br' });
-    }
-
-
     const { error } = registerSchema.validate(req.body)
 
 
@@ -57,7 +51,7 @@ export const login = async (req, res, next) => {
 
     logger.info(`📥 [LOGIN CONTROLLER] Tentativa de login: ${email}`);
 
-    const {token, user} = await loginService({ email, password });
+    const { token, user } = await loginService({ email, password });
 
     logger.info(`✅ [LOGIN CONTROLLER] Login bem-sucedido: ${email}`);
 

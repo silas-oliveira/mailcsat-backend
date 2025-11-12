@@ -54,14 +54,26 @@ dotenv.config()
 
 import Queue from 'bull'
 
-const emailQueue = new Queue('emailQueue', {
-  redis: {
+
+const redisConfig = process.env.UPSTASH_REDIS_HOST
+  ? {
     host: process.env.UPSTASH_REDIS_HOST,
     port: Number(process.env.UPSTASH_REDIS_PORT),
     username: process.env.UPSTASH_REDIS_USER,
     password: process.env.UPSTASH_REDIS_PASS,
     tls: {}
-  },
+  } :
+  {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT
+  }
+
+
+
+
+
+const emailQueue = new Queue('emailQueue', {
+  redis: redisConfig,
   limiter: {
     max: 1,
     duration: 3000
@@ -78,3 +90,5 @@ emailQueue.on('error', (err) => {
 })
 
 export default emailQueue
+
+
